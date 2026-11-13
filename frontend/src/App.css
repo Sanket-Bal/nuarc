@@ -27,6 +27,19 @@ body {
   background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
 }
 
+/* Google Fonts */
+.special-elite-regular {
+  font-family: "Special Elite", system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.sancreek-regular {
+  font-family: "Sancreek", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
 /* Navigation */
 .navbar {
   position: fixed;
@@ -145,6 +158,7 @@ body {
   text-align: center;
   max-width: 800px;
   animation: fadeInUp 1s ease-out;
+  will-change: transform;
 }
 
 @keyframes fadeInUp {
@@ -159,14 +173,18 @@ body {
 }
 
 .hero-title {
-  font-size: 4rem;
+  font-size: 5rem;
   font-weight: 900;
   line-height: 1.2;
   margin-bottom: 1.5rem;
-  background: linear-gradient(135deg, #60a5fa, #ec4899, #f59e0b);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #f5f1e8;
+  font-family: "Sancreek", serif;
+  font-weight: 400;
+  font-style: normal;
+  letter-spacing: -0.02em;
+  text-shadow: 0 0 20px rgba(96, 165, 250, 0.3);
+  -webkit-text-stroke: 2px #000000;
+  paint-order: stroke fill;
 }
 
 .title-word {
@@ -202,6 +220,9 @@ body {
   color: rgba(255, 255, 255, 0.8);
   margin-bottom: 2rem;
   animation: fadeInUp 1s ease-out 0.6s backwards;
+  font-family: "Special Elite", system-ui;
+  font-weight: 900;
+  font-style: normal;
 }
 
 .cta-button {
@@ -269,6 +290,46 @@ body {
   }
 }
 
+/* Hero Image with Parallax */
+.hero-image {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  will-change: transform;
+}
+
+.hero-img-desktop,
+.hero-img-mobile {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  animation: fadeInImage 1s ease-out;
+}
+
+.hero-img-desktop {
+  display: block;
+}
+
+.hero-img-mobile {
+  display: none;
+}
+
+@keyframes fadeInImage {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 /* Gradient Orbs */
 .orb {
   position: absolute;
@@ -276,6 +337,7 @@ body {
   filter: blur(80px);
   opacity: 0.6;
   animation: moveOrb 15s ease-in-out infinite;
+  z-index: 3;
 }
 
 .orb-1 {
@@ -631,6 +693,14 @@ body {
 
   .nav-links a::after {
     display: none;
+  }
+
+  .hero-img-desktop {
+    display: none;
+  }
+
+  .hero-img-mobile {
+    display: block;
   }
 
   .steps-container {

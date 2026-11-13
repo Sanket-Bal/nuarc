@@ -1,7 +1,18 @@
 import './App.css'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 function App() {
+  const [scrollY, setScrollY] = useState(0)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY)
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
   const toggleMenu = () => {
     const hamburger = document.getElementById('hamburger')
     const navLinks = document.getElementById('nav-links')
@@ -55,20 +66,25 @@ function App() {
 
       {/* Hero Section */}
       <section className="hero">
-        <div className="hero-content">
-          <h1 className="hero-title">
-            <span className="title-word">Discover</span>
-            <span className="title-word">Your Next</span>
-            <span className="title-word">Favorite</span>
+        {/* Hero Image with Parallax */}
+        <div className="hero-image" style={{ transform: `translateY(${scrollY * 0.5}px)` }}>
+          <img src="/landing-page/horizontal.jpeg" alt="Hero" className="hero-img-desktop" />
+          <img src="/landing-page/vertical.jpeg" alt="Hero" className="hero-img-mobile" />
+        </div>
+
+        {/* Animated Background Elements */}
+        <div className="hero-background"></div>
+
+        {/* Hero Content with Parallax */}
+        <div className="hero-content" style={{ transform: `translateY(${scrollY * 0.2}px)` }}>
+          <h1 className="hero-title" style={{fontSize: ``}}>
+            Nuarc
           </h1>
           <p className="hero-subtitle">
             AI-powered recommendations for movies and anime tailored just for you
           </p>
           <button className="cta-button">Start Exploring</button>
         </div>
-
-        {/* Animated Background Elements */}
-        <div className="hero-background"></div>
 
         {/* Gradient Orbs */}
         <div className="orb orb-1"></div>
