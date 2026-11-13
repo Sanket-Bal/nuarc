@@ -1,8 +1,11 @@
 import './App.css'
 import { useEffect, useState } from 'react'
+import Auth from './Auth'
+import Home from './Home'
 
 function App() {
   const [scrollY, setScrollY] = useState(0)
+  const [currentPage, setCurrentPage] = useState('home')
 
   useEffect(() => {
     const handleScroll = () => {
@@ -43,6 +46,34 @@ function App() {
     return () => document.removeEventListener('click', handleClickOutside)
   }, [])
 
+  const handleGetStarted = () => {
+    setCurrentPage('auth')
+    window.scrollTo(0, 0)
+  }
+
+  const handleBackToLanding = () => {
+    setCurrentPage('landing')
+    window.scrollTo(0, 0)
+  }
+
+  const handleLoginSuccess = () => {
+    setCurrentPage('dashboard')
+    window.scrollTo(0, 0)
+  }
+
+  const handleLogout = () => {
+    setCurrentPage('landing')
+    window.scrollTo(0, 0)
+  }
+
+  if (currentPage === 'auth') {
+    return <Auth onBack={handleBackToLanding} onLoginSuccess={handleLoginSuccess} />
+  }
+
+  if (currentPage === 'dashboard') {
+    return <Home onLogout={handleLogout} />
+  }
+
   return (
     <div className="app">
       {/* Navigation */}
@@ -77,13 +108,13 @@ function App() {
 
         {/* Hero Content with Parallax */}
         <div className="hero-content" style={{ transform: `translateY(${scrollY * 0.2}px)` }}>
-          <h1 className="hero-title" style={{fontSize: ``}}>
-            Nuarc
+          <h1 className="hero-title">
+            Discover Your Next Favorite
           </h1>
           <p className="hero-subtitle">
             AI-powered recommendations for movies and anime tailored just for you
           </p>
-          <button className="cta-button">Start Exploring</button>
+          <button className="cta-button" onClick={handleGetStarted}>Start Exploring</button>
         </div>
 
         {/* Gradient Orbs */}
@@ -148,7 +179,7 @@ function App() {
         <div className="cta-content">
           <h2>Ready to Find Your Next Obsession?</h2>
           <p>Join thousands of movie and anime enthusiasts discovering their perfect match</p>
-          <button className="cta-button-large">Get Started Now</button>
+          <button className="cta-button-large" onClick={handleGetStarted}>Get Started Now</button>
         </div>
       </section>
 
