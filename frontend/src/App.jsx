@@ -1,7 +1,21 @@
 import './App.css'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import Auth from './Auth'
+import Home from './Home'
 
 function App() {
+  const [scrollY, setScrollY] = useState(0)
+  const [currentPage, setCurrentPage] = useState('home')
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY)
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
   const toggleMenu = () => {
     const hamburger = document.getElementById('hamburger')
     const navLinks = document.getElementById('nav-links')
@@ -32,6 +46,34 @@ function App() {
     return () => document.removeEventListener('click', handleClickOutside)
   }, [])
 
+  const handleGetStarted = () => {
+    setCurrentPage('auth')
+    window.scrollTo(0, 0)
+  }
+
+  const handleBackToLanding = () => {
+    setCurrentPage('landing')
+    window.scrollTo(0, 0)
+  }
+
+  const handleLoginSuccess = () => {
+    setCurrentPage('dashboard')
+    window.scrollTo(0, 0)
+  }
+
+  const handleLogout = () => {
+    setCurrentPage('landing')
+    window.scrollTo(0, 0)
+  }
+
+  if (currentPage === 'auth') {
+    return <Auth onBack={handleBackToLanding} onLoginSuccess={handleLoginSuccess} />
+  }
+
+  if (currentPage === 'dashboard') {
+    return <Home onLogout={handleLogout} />
+  }
+
   return (
     <div className="app">
       {/* Navigation */}
@@ -55,20 +97,25 @@ function App() {
 
       {/* Hero Section */}
       <section className="hero">
-        <div className="hero-content">
-          <h1 className="hero-title">
-            <span className="title-word">Discover</span>
-            <span className="title-word">Your Next</span>
-            <span className="title-word">Favorite</span>
-          </h1>
-          <p className="hero-subtitle">
-            AI-powered recommendations for movies and anime tailored just for you
-          </p>
-          <button className="cta-button">Start Exploring</button>
+        {/* Hero Image with Parallax */}
+        <div className="hero-image" style={{ transform: `translateY(${scrollY * 0.5}px)` }}>
+          <img src="/landing-page/horizontal.jpeg" alt="Hero" className="hero-img-desktop" />
+          <img src="/landing-page/vertical.jpeg" alt="Hero" className="hero-img-mobile" />
         </div>
 
         {/* Animated Background Elements */}
         <div className="hero-background"></div>
+
+        {/* Hero Content with Parallax */}
+        <div className="hero-content" style={{ transform: `translateY(${scrollY * 0.2}px)` }}>
+          <h1 className="hero-title">
+            Discover Your Next Favorite
+          </h1>
+          <p className="hero-subtitle">
+            AI-powered recommendations for movies and anime tailored just for you
+          </p>
+          <button className="cta-button" onClick={handleGetStarted}>Start Exploring</button>
+        </div>
 
         {/* Gradient Orbs */}
         <div className="orb orb-1"></div>
@@ -132,7 +179,7 @@ function App() {
         <div className="cta-content">
           <h2>Ready to Find Your Next Obsession?</h2>
           <p>Join thousands of movie and anime enthusiasts discovering their perfect match</p>
-          <button className="cta-button-large">Get Started Now</button>
+          <button className="cta-button-large" onClick={handleGetStarted}>Get Started Now</button>
         </div>
       </section>
 
