@@ -1,8 +1,12 @@
 import { useState } from 'react'
 import './Auth.css'
+import { useAuth } from './AuthContext'
 
 function Auth({ onBack, onLoginSuccess }) {
+  const { signUp, signIn } = useAuth()
   const [isLogin, setIsLogin] = useState(true)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -13,6 +17,7 @@ function Auth({ onBack, onLoginSuccess }) {
   const toggleMode = () => {
     setIsLogin(!isLogin)
     setFormData({ name: '', email: '', password: '', confirmPassword: '' })
+    setError('')
   }
 
   const handleInputChange = (e) => {
@@ -23,22 +28,33 @@ function Auth({ onBack, onLoginSuccess }) {
     }))
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
+    setError('')
+    setLoading(true)
     
-    if (isLogin) {
-      if (formData.email && formData.password) {
-        onLoginSuccess()
-      }
-    } else {
-      if (formData.name && formData.email && formData.password && formData.confirmPassword) {
-        if (formData.password === formData.confirmPassword) {
-          setIsLogin(true)
-          setFormData({ name: '', email: '', password: '', confirmPassword: '' })
-        } else {
-          alert('Passwords do not match!')
+    try {
+      if (isLogin) {
+        if (formData.email && formData.password) {
+          await signIn(formData.email, formData.password)
+          onLoginSuccess()
+        }
+      } else {
+        if (formData.name && formData.email && formData.password && formData.confirmPassword) {
+          if (formData.password === formData.confirmPassword) {
+            await signUp(formData.email, formData.password, formData.name)
+            setIsLogin(true)
+            setFormData({ name: '', email: '', password: '', confirmPassword: '' })
+            setError('Account created! Please check your email to confirm.')
+          } else {
+            setError('Passwords do not match!')
+          }
         }
       }
+    } catch (err) {
+      setError(err.message || 'An error occurred')
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -55,6 +71,8 @@ function Auth({ onBack, onLoginSuccess }) {
             {isLogin ? 'Welcome Back' : 'Join Us Today'}
           </p>
         </div>
+
+        {error && <div className="auth-error">{error}</div>}
 
         <form className="auth-form" onSubmit={handleSubmit}>
           {!isLogin && (
@@ -116,8 +134,8 @@ function Auth({ onBack, onLoginSuccess }) {
             </div>
           )}
 
-          <button type="submit" className="auth-button">
-            {isLogin ? 'Sign In' : 'Create Account'}
+          <button type="submit" className="auth-button" disabled={loading}>
+            {loading ? 'Loading...' : (isLogin ? 'Sign In' : 'Create Account')}
           </button>
         </form>
 
