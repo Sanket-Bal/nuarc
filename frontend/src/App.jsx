@@ -2,10 +2,11 @@ import './App.css'
 import { useEffect, useState } from 'react'
 import Auth from './Auth'
 import Home from './Home'
+import Profile from './Profile'
 
 function App() {
   const [scrollY, setScrollY] = useState(0)
-  const [currentPage, setCurrentPage] = useState('home')
+  const [currentPage, setCurrentPage] = useState('landing')
 
   useEffect(() => {
     const handleScroll = () => {
@@ -66,12 +67,26 @@ function App() {
     window.scrollTo(0, 0)
   }
 
+  const handleProfileClick = () => {
+    setCurrentPage('profile')
+    window.scrollTo(0, 0)
+  }
+
+  const handleBackToHome = () => {
+    setCurrentPage('dashboard')
+    window.scrollTo(0, 0)
+  }
+
   if (currentPage === 'auth') {
     return <Auth onBack={handleBackToLanding} onLoginSuccess={handleLoginSuccess} />
   }
 
+  if (currentPage === 'profile') {
+    return <Profile onBack={handleBackToHome} />
+  }
+
   if (currentPage === 'dashboard') {
-    return <Home onLogout={handleLogout} />
+    return <Home onLogout={handleLogout} onProfileClick={handleProfileClick} />
   }
 
   return (

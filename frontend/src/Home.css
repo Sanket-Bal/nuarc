@@ -89,6 +89,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative;
 }
 
 .home-logo {
@@ -105,6 +106,85 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+.home-hamburger {
+  display: none;
+  flex-direction: column;
+  background: none;
+  border: none;
+  cursor: pointer;
+  gap: 6px;
+  padding: 0;
+}
+
+.home-hamburger span {
+  width: 25px;
+  height: 3px;
+  background: white;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.home-hamburger.active span:nth-child(1) {
+  transform: rotate(45deg) translate(10px, 10px);
+}
+
+.home-hamburger.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.home-hamburger.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(7px, -7px);
+}
+
+.home-menu {
+  display: none;
+  position: absolute;
+  top: 60px;
+  right: 0;
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+  min-width: 200px;
+  z-index: 101;
+}
+
+.home-menu.active {
+  display: flex;
+  flex-direction: column;
+}
+
+.home-menu-item {
+  padding: 1rem 1.5rem;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: left;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.home-menu-item:last-child {
+  border-bottom: none;
+}
+
+.home-menu-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
+}
+
+.home-menu-item.logout {
+  color: #ec4899;
+}
+
+.home-menu-item.logout:hover {
+  background: rgba(236, 72, 153, 0.1);
 }
 
 .home-logout-button {
@@ -386,8 +466,17 @@
   }
 
   .home-logout-button {
-    padding: 0.5rem 1rem;
-    font-size: 0.9rem;
+    display: none;
+  }
+
+  .home-hamburger {
+    display: flex;
+  }
+
+  .home-menu {
+    position: absolute;
+    top: 50px;
+    right: 1rem;
   }
 }
 

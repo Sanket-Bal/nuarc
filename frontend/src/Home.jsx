@@ -1,9 +1,10 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './Home.css'
 
-function Home({ onLogout }) {
+function Home({ onLogout, onProfileClick }) {
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('all')
+  const [menuOpen, setMenuOpen] = useState(false)
 
   const recommendations = [
     { id: 1, title: 'Demon Slayer', category: 'anime', rating: 9.1, image: '🎬' },
@@ -22,6 +23,36 @@ function Home({ onLogout }) {
     return matchesCategory && matchesSearch
   })
 
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen)
+  }
+
+  const closeMenu = () => {
+    setMenuOpen(false)
+  }
+
+  const handleProfileClick = () => {
+    closeMenu()
+    onProfileClick()
+  }
+
+  const handleLogoutClick = () => {
+    closeMenu()
+    onLogout()
+  }
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      const navbar = document.querySelector('.home-navbar')
+      if (navbar && !navbar.contains(event.target)) {
+        closeMenu()
+      }
+    }
+
+    document.addEventListener('click', handleClickOutside)
+    return () => document.removeEventListener('click', handleClickOutside)
+  }, [])
+
   return (
     <div className="home-container">
       {/* Navigation */}
@@ -30,7 +61,20 @@ function Home({ onLogout }) {
           <div className="home-logo">
             <span className="home-logo-text">Nuarc</span>
           </div>
-          <button className="home-logout-button" onClick={onLogout}>
+          <button className="home-hamburger" id="home-hamburger" onClick={toggleMenu}>
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+          <div className={`home-menu ${menuOpen ? 'active' : ''}`} id="home-menu">
+            <button className="home-menu-item" onClick={handleProfileClick}>
+              👤 Profile
+            </button>
+            <button className="home-menu-item logout" onClick={handleLogoutClick}>
+              🚪 Logout
+            </button>
+          </div>
+          <button className="home-logout-button" onClick={handleLogoutClick}>
             Logout
           </button>
         </div>
